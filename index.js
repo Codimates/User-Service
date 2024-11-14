@@ -1,0 +1,1 @@
+console.log('User-Service is running on port 3001');
