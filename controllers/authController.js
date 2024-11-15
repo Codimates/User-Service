@@ -2,7 +2,7 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const { comparePassword } = require('../helpers/auth');
 
-// Login Endpoint
+//login end point
 const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -10,31 +10,25 @@ const loginUser = async (req, res) => {
         // Check if user exists
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(404).json({ error: 'No user found' });
+            return res.json({
+                error: 'No user found'
+            });
         }
 
-        // Compare password
+        // Compare passwords
         const match = await comparePassword(password, user.password);
         if (match) {
-            // Generate token
-            jwt.sign(
-                { id: user._id },
-                process.env.REACT_APP_JWT_SECRET,
-                {},
-                (err, token) => {
-                    if (err) {
-                        console.error('Error generating token:', err);
-                        return res.status(500).json({ error: 'Server error' });
-                    }
-                    // Set token in cookie and respond
-                    res.cookie('token', token, { httpOnly: true, secure: true }).json(user);
-                }
-            );
+            //return res.json('Password match');
+            jwt.sign({ id: user._id,fname: user.fname, lname: user.lname , role : user.role  },process.env.REACT_APP_JWT_SECRET, {}, (err,token) => {
+                if(err) throw err;
+                res.cookie('token',token).json(user)
+            })
         } else {
-            return res.status(401).json({ error: 'Incorrect password' });
+            return res.json({ error: 'Incorrect password' });
         }
+
     } catch (error) {
-        console.error('Login error:', error);
+        console.log(error);
         return res.status(500).json({ error: 'Server error' });
     }
 };
