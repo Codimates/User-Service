@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-
+app.use('/', require('./routes/userRouter'));
 
 
 const PORT = 4001;
