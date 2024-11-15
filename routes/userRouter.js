@@ -9,9 +9,12 @@ router.use(
 );
 
 const { createUser } = require('../controllers/userController');
-const { loginUser } = require('../controllers/authController')
+const { loginUser, logoutUser, getprofile } = require('../controllers/authController')
 
 router.post('/createuser', createUser)
+router.get('/profile',getprofile)
+
 router.post('/login',loginUser)
+router.post('/logout',logoutUser)
 
 module.exports = router;
