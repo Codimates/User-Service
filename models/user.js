@@ -28,7 +28,11 @@ const userSchema = new mongoose.Schema({
     address:{
         type:String,
         required:false
-    }
+    },
+    image:{
+        type:String,
+        required:false
+    },
 }, { timestamps: true });
 userSchema.pre('save', async function(next) {
     if (this.isModified('password')) {
