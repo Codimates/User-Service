@@ -4,7 +4,7 @@ const cors = require('cors');
 router.use(
     cors({
         credentials: true,
-        origin: 'http://localhost:3000'
+        origin: 'http://localhost:3000' || 'https://localhost:3001'
     })
 );
 
