@@ -74,6 +74,7 @@ const getprofile = (req, res) => {
     });
 };
 
+
 // Logout Endpoint
 const logoutUser = (req, res) => {
     res.clearCookie('token');
