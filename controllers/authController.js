@@ -33,6 +33,64 @@ const loginUser = async (req, res) => {
     }
 };
 
+//login only admin sales manager, inventory manager
+const loginoparational = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        
+        // Define allowed roles
+        const allowedRoles = ['admin', 'inventorymanager', 'productmanager', 'salesmanager'];
+
+        // Check if user exists and has an allowed role
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({
+                error: 'No user found'
+            });
+        }
+
+        // Validate user role
+        if (!allowedRoles.includes(user.role)) {
+            return res.status(403).json({
+                error: 'Unauthorized access: Invalid role'
+            });
+        }
+
+        // Compare passwords
+        const match = await comparePassword(password, user.password);
+        if (match) {
+            // Generate JWT token with user information
+            jwt.sign(
+                { 
+                    id: user._id,
+                    fname: user.fname, 
+                    lname: user.lname, 
+                    role: user.role 
+                },
+                process.env.REACT_APP_JWT_SECRET, 
+                { expiresIn: '1h' }, // Optional: add token expiration
+                (err, token) => {
+                    if (err) throw err;
+                    res.cookie('token', token, {
+                        httpOnly: true, // Improve security
+                        secure: process.env.NODE_ENV === 'production' // Use secure in production
+                    }).json({
+                        id: user._id,
+                        fname: user.fname,
+                        lname: user.lname,
+                        role: user.role
+                    });
+                }
+            );
+        } else {
+            return res.status(401).json({ error: 'Incorrect password' });
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        return res.status(500).json({ error: 'Server error' });
+    }
+};
+
 // Get Profile Endpoint
 const getprofile = (req, res) => {
     const { token } = req.cookies;
@@ -85,4 +143,5 @@ module.exports = {
     loginUser,
     getprofile,
     logoutUser,
+    loginoparational
 };
