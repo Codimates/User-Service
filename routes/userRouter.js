@@ -19,11 +19,12 @@ router.use(
 
 // Importing controller functions
 const { createUser } = require('../controllers/userController');
-const { loginUser, logoutUser, getprofile, loginoparational } = require('../controllers/authController');
+const { loginUser, logoutUser, getprofile, loginoparational, loginCustomer } = require('../controllers/authController');
 
 // Defining routes
 router.post('/createuser', createUser);
 router.post('/loginstaff',loginoparational)
+router.post('/logincustomer', loginCustomer)
 router.get('/profile', getprofile);
 router.post('/login', loginUser);
 router.post('/logout', logoutUser);

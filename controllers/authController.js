@@ -19,7 +19,7 @@ const loginUser = async (req, res) => {
         const match = await comparePassword(password, user.password);
         if (match) {
             //return res.json('Password match');
-            jwt.sign({ id: user._id,fname: user.fname, lname: user.lname , role : user.role  },process.env.REACT_APP_JWT_SECRET, {}, (err,token) => {
+            jwt.sign({ id: user._id,fname: user.fname, lname: user.lname , role : user.role,   },process.env.REACT_APP_JWT_SECRET, {}, (err,token) => {
                 if(err) throw err;
                 res.cookie('token',token).json(user)
             })
@@ -91,6 +91,47 @@ const loginoparational = async (req, res) => {
     }
 };
 
+//login only customer
+const loginCustomer = async (req, res)=>{
+    try {
+        const { email, password } = req.body;
+
+        const allowedRoles = ['customer'];
+
+        // Check if user exists
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.json({
+                error: 'No user found'
+            });
+        }
+
+        // Validate user role
+        if (!allowedRoles.includes(user.role)) {
+            return res.status(403).json({
+                error: 'Unauthorized access: Invalid role'
+            });
+        }
+
+        // Compare passwords
+        const match = await comparePassword(password, user.password);
+        if (match) {
+            //return res.json('Password match');
+            jwt.sign({ id: user._id,fname: user.fname, lname: user.lname , role : user.role,   },process.env.REACT_APP_JWT_SECRET, {}, (err,token) => {
+                if(err) throw err;
+                res.cookie('token',token).json(user)
+            })
+        } else {
+            return res.json({ error: 'Incorrect password' });
+        }
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ error: 'Server error' });
+    }
+}
+
+
 // Get Profile Endpoint
 const getprofile = (req, res) => {
     const { token } = req.cookies;
@@ -121,6 +162,7 @@ const getprofile = (req, res) => {
                     role: user.role,
                     phone_number: user.phone_number,
                     address: user.address,
+                    image: user.image
                 };
 
                 res.json(userProfile);
@@ -143,5 +185,6 @@ module.exports = {
     loginUser,
     getprofile,
     logoutUser,
-    loginoparational
+    loginoparational,
+    loginCustomer
 };
