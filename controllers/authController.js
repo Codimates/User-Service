@@ -59,7 +59,7 @@ const loginoparational = async (req, res) => {
         const match = await comparePassword(password, user.password);
         if (match) {
             //return res.json('Password match');
-            jwt.sign({ id: user._id,fname: user.fname, lname: user.lname , role : user.role,   },process.env.REACT_APP_JWT_SECRET, {}, (err,token) => {
+            jwt.sign({ id: user._id,fname: user.fname, lname: user.lname , role : user.role, email: user.email   },process.env.REACT_APP_JWT_SECRET, {}, (err,token) => {
                 if(err) throw err;
                 res.cookie('token',token).json(user)
             })
@@ -99,7 +99,7 @@ const loginCustomer = async (req, res)=>{
         const match = await comparePassword(password, user.password);
         if (match) {
             //return res.json('Password match');
-            jwt.sign({ id: user._id,fname: user.fname, lname: user.lname , role : user.role,   },process.env.REACT_APP_JWT_SECRET, {}, (err,token) => {
+            jwt.sign({ id: user._id,fname: user.fname, lname: user.lname , role : user.role, email: user.email   },process.env.REACT_APP_JWT_SECRET, {}, (err,token) => {
                 if(err) throw err;
                 res.cookie('token',token).json(user)
             })
