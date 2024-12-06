@@ -24,10 +24,34 @@ const createUser = async (req, res) => {
     }
 }
 
+//update user by id
+const updateUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const {fname, lname, email, phone_number, password, role, address,image} = req.body;
+        const user = await User.findByIdAndUpdate(id, {
+            fname,
+            lname,
+            email,
+            phone_number,
+            password,
+            role,
+            address,
+            image
+        }, { new: true });
+
+        res.status(200).json({ message: 'User updated successfully', data: user });
+
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
 
 
 module.exports = {
     createUser,
+    updateUser
     
 
 }
