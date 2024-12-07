@@ -1,7 +1,7 @@
-const { createUser, updateUser } = require('../controllers/userController'); // Adjust the path as needed
-const User = require('../models/user'); // Adjust the path to the User model
+const { createUser, updateUser } = require('./controllers/userController'); // Adjust the path as needed
+const User = require('./models/user'); // Adjust the path to the User model
 
-jest.mock('../models/user'); // Mock the User model
+jest.mock('./models/user'); // Mock the User model
 
 describe('User Controller', () => {
     describe('createUser', () => {
