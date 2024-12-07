@@ -1,11 +1,11 @@
-const { loginUser, loginoparational, loginCustomer, getprofile, logoutUser } = require("../controllers/authController");
-const User = require("../models/user");
+const { loginUser, loginoparational, loginCustomer, getprofile, logoutUser } = require("./controllers/authController");
+const User = require("./models/user");
 const jwt = require("jsonwebtoken");
-const { comparePassword } = require("../helpers/auth");
+const { comparePassword } = require("./helpers/auth");
 
-jest.mock("../models/user"); // Mock User model
+jest.mock("./models/user"); // Mock User model
 jest.mock("jsonwebtoken"); // Mock JWT module
-jest.mock("../helpers/auth"); // Mock comparePassword helper
+jest.mock("./helpers/auth"); // Mock comparePassword helper
 
 describe("Auth Controller", () => {
     let req, res;
